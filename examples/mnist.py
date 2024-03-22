@@ -2,7 +2,7 @@ import tensorflow as tf
 import logging
 from PIL import Image
 import pickle
-
+import numpy as np
 from simple_rbm import RBM
 
 

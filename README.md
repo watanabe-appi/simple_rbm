@@ -10,7 +10,7 @@ source myenv/bin/activate
 python3 -m pip install --upgrade pip
 python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
 cd examples
-python3 -m pip install Pillow pickles
+python3 -m pip install tensorflow Pillow pickles
 python3 mnist.py
 ```
 
