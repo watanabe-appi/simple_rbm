@@ -1,4 +1,9 @@
-import numpy as np 
+try:
+    import cupy as np
+    has_GPU = True
+except ImportError:
+    import numpy as np
+    has_GPU = False
 import logging
 from typing import Dict
 

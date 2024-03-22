@@ -1,5 +1,4 @@
 import tensorflow as tf
-import numpy as np
 import logging
 from PIL import Image
 import pickle
@@ -23,8 +22,8 @@ def main():
     logging.basicConfig(level=logging.INFO)
     (x_train, _), (x_test, _) = tf.keras.datasets.mnist.load_data()
     
-    x_train = x_train / 255
-    x_test = x_test / 255
+    x_train = np.array(x_train) / 255
+    x_test = np.array(x_test) / 255
     x_train = x_train.reshape(-1, 28 * 28).astype(np.float32) # reshapeの第一引数を-1にすると適切なサイズにしてくれる
     x_test = x_test.reshape(-1, 28 * 28).astype(np.float32)
 
