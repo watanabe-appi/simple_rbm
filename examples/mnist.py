@@ -36,9 +36,9 @@ def main():
     save_img("output.png", output)
 
     for i in range(10):
-        save_img(f"np_input_{i}.png", x_test[i])
+        save_img(f"input_{i}.png", x_test[i])
         output = rbm.reconstruct(x_test[i].reshape(1, 28 * 28))[0]
-        save_img(f"np_output_{i}.png", output)
+        save_img(f"output_{i}.png", output)
 
     params = rbm.get_state()
     with open("params_test.pkl", mode="wb") as f:
