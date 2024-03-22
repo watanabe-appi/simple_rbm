@@ -74,8 +74,8 @@ class RBM:
         return error
     
 
-    def train(self, data_set, epoch_num, batch_size):
-        for epoch in range(epoch_num):
+    def fit(self, data_set, *, epochs=10, batch_size=1):
+        for epoch in range(epochs):
             self.logger.info("epoch: %d", epoch)
             epoch_error = 0
             
