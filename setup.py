@@ -9,7 +9,6 @@ setup(
     auhtor='H. Watanabe',
     install_requires=[
         'numpy',
-        'logging',
         'typing',
     ],
 )
