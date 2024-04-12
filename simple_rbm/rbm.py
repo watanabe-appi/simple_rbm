@@ -15,11 +15,13 @@ class RBM:
         self.visible_num = visible_num
         self.hidden_num = hidden_num
 
-        self.w = np.array(self.xavier_init(visible_num, hidden_num), dtype=np.float32)
+        self.w = np.array(self.xavier_init(
+            visible_num, hidden_num), dtype=np.float32)
         self.visible_bias = np.zeros(visible_num, dtype=np.float32)
         self.hidden_bias = np.zeros(hidden_num, dtype=np.float32)
 
-        self.delta_w = np.zeros([self.visible_num, self.hidden_num], dtype=np.float32)
+        self.delta_w = np.zeros(
+            [self.visible_num, self.hidden_num], dtype=np.float32)
         self.delta_visible_bias = np.zeros(visible_num, dtype=np.float32)
         self.delta_hidden_bias = np.zeros(hidden_num, dtype=np.float32)
 
@@ -50,9 +52,11 @@ class RBM:
         return (former_delta_w * momentum) + ((1 - momentum) * learning_rate * new_grad)
 
     def step(self, batch):
-        sampled_hidden = self.sample(self.sigmoid(batch.dot(self.w) + self.hidden_bias))
+        sampled_hidden = self.sample(self.sigmoid(
+            batch.dot(self.w) + self.hidden_bias))
         sampled_visible = self.sample(
-            self.sigmoid(sampled_hidden.dot(self.w.transpose()) + self.visible_bias)
+            self.sigmoid(sampled_hidden.dot(
+                self.w.transpose()) + self.visible_bias)
         )
         re_sampled_hidden = self.sample(
             self.sigmoid(sampled_visible.dot(self.w) + self.hidden_bias)
@@ -67,7 +71,8 @@ class RBM:
             self.delta_visible_bias, np.mean(batch - sampled_visible, axis=0)
         )
         self.delta_hidden_bias = self.apply_momentum(
-            self.delta_hidden_bias, np.mean(sampled_hidden - re_sampled_hidden, axis=0)
+            self.delta_hidden_bias, np.mean(
+                sampled_hidden - re_sampled_hidden, axis=0)
         )
 
         self.w += self.delta_w
@@ -91,7 +96,8 @@ class RBM:
                 batch_error = self.step(batch)
                 epoch_error += batch_error
 
-            self.logger.info("mean squared error: %f", epoch_error / batch_data_num)
+            self.logger.info("mean squared error: %f",
+                             epoch_error / batch_data_num)
 
     def get_state(self) -> Dict[str, np.ndarray]:
         return {
@@ -122,3 +128,17 @@ class RBM:
         hidden = self.sigmoid(input.dot(self.w) + self.hidden_bias)
 
         return hidden
+
+    def sample_hidden(self, input_visible):
+        sampled_values = self.sample(self.sigmoid(
+            input_visible.dot(self.w) + self.hidden_bias))
+
+        return sampled_values
+
+    def sample_visible(self, input_hidden):
+        sampled_values = self.sample(
+            self.sigmoid(input_hidden.dot(
+                self.w.transpose()) + self.visible_bias)
+        )
+
+        return sampled_values
