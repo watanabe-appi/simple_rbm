@@ -1,5 +1,14 @@
 # Simple implementation of Restricted Boltzmann Machine (RBM)
 
+## Install
+
+```sh
+python3 -m venv myenv 
+source myenv/bin/activate
+python3 -m pip install --upgrade pip
+python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
+```
+
 ## Test this repository
 
 ```sh
@@ -9,18 +18,9 @@ python3 -m venv myenv
 source myenv/bin/activate
 python3 -m pip install --upgrade pip
 python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
-cd examples
 python3 -m pip install tensorflow Pillow pickles
+cd examples
 python3 mnist.py
-```
-
-## Install
-
-```sh
-python3 -m venv myenv 
-source myenv/bin/activate
-python3 -m pip install --upgrade pip
-python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
 ```
 
 ## Use on ISSP System C
@@ -37,6 +37,7 @@ source myenv/bin/activate
 python3 -m pip install --upgrade pip
 python3 -m pip install tensorflow Pillow pickles
 python3 -m pip install cupy-cuda112
+python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
 ```
 
 Execute on an ACC node.
@@ -46,7 +47,7 @@ qsub -I -q i1accs -l select=1:ncpus=64
 module purge
 module load cuda/11.2
 source myenv/bin/activate
-cd stand_alone
+cd examples
 python3 mnist.py
 ```
 
