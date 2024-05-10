@@ -2,10 +2,16 @@ import tensorflow as tf
 import logging
 from PIL import Image
 import pickle
-import numpy as np
-
 import sys
 import os
+
+try:
+    import cupy as np
+    has_GPU = True
+except ImportError:
+    import numpy as np
+    has_GPU = False
+
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if base_dir not in sys.path:
     sys.path.append(base_dir)
