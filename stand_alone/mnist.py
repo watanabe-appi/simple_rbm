@@ -7,14 +7,16 @@ import os
 
 try:
     import cupy as np
+
     has_GPU = True
-    print("GPGPU is found. Use it")
+    print("A GPGPU has been detected, so it will be used.")
 except ImportError:
     import numpy as np
-    has_GPU = False
-    print("GPGPU is not found.")
 
-base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    has_GPU = False
+    print("GPGPUs were not detected, so the computation will proceed with the CPU.")
+
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if base_dir not in sys.path:
     sys.path.append(base_dir)
 

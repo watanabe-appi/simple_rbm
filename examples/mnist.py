@@ -2,16 +2,16 @@ import tensorflow as tf
 import logging
 from PIL import Image
 import pickle
-import sys
-import os
 from simple_rbm import RBM
 
 try:
     import cupy as np
+
     has_GPU = True
     print("A GPGPU has been detected, so it will be used.")
 except ImportError:
     import numpy as np
+
     has_GPU = False
     print("GPGPUs were not detected, so the computation will proceed with the CPU.")
 
