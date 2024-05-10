@@ -2,8 +2,18 @@ import tensorflow as tf
 import logging
 from PIL import Image
 import pickle
-import numpy as np
+import sys
+import os
 from simple_rbm import RBM
+
+try:
+    import cupy as np
+    has_GPU = True
+    print("A GPGPU has been detected, so it will be used.")
+except ImportError:
+    import numpy as np
+    has_GPU = False
+    print("GPGPUs were not detected, so the computation will proceed with the CPU.")
 
 
 def save_img(filename, data):
@@ -29,7 +39,7 @@ def main():
     x_test = x_test.reshape(-1, 28 * 28).astype(np.float32)
 
     rbm = RBM(visible_num=28 * 28, hidden_num=64)
-    rbm.fit(x_train, epochs=2, batch_size=1000)
+    rbm.fit(x_train, epochs=10, batch_size=1000)
 
     save_img("input.png", x_test[0])
     output = rbm.reconstruct(x_test[:1])[0]
