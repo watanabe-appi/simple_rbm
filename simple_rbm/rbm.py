@@ -41,8 +41,10 @@ class RBM:
     def sample(self, expected_values):
         r = np.random.random(expected_values.shape)
         s = expected_values - r
-        sampled_values = np.heaviside(s, 0)
-
+        #sampled_values = np.heaviside(s, 0)
+        # use tanh instead of heaviside, since old version 
+        # of CuPy does not support it
+        sampled_values = (np.tanh(s*100)+1.0)*0.5
         return sampled_values
 
     def apply_momentum(self, former_delta_w, new_grad):
@@ -88,6 +90,7 @@ class RBM:
             self.logger.info("epoch: %d", epoch)
             epoch_error = 0
 
+            data_set = np.array(data_set)
             np.random.shuffle(data_set)
             batch_data = np.array_split(data_set, len(data_set) // batch_size)
             batch_data_num = len(batch_data)
