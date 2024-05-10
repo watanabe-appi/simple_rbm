@@ -8,9 +8,11 @@ import os
 try:
     import cupy as np
     has_GPU = True
+    print("GPGPU is found. Use it")
 except ImportError:
     import numpy as np
     has_GPU = False
+    print("GPGPU is not found.")
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if base_dir not in sys.path:
@@ -42,7 +44,7 @@ def main():
     x_test = x_test.reshape(-1, 28 * 28).astype(np.float32)
 
     rbm = RBM(visible_num=28 * 28, hidden_num=64)
-    rbm.fit(x_train, epochs=2, batch_size=1000)
+    rbm.fit(x_train, epochs=10, batch_size=1000)
 
     save_img("input.png", x_test[0])
     output = rbm.reconstruct(x_test[:1])[0]
