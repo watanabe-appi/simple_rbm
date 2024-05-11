@@ -86,6 +86,10 @@ class RBM:
         return error
 
     def fit(self, data_set, *, epochs=10, batch_size=1):
+        if has_GPU:
+            self.logger.info("A GPGPU has been detected, so it will be used.")
+        else:
+            self.logger.info("GPGPUs were not detected, so the computation will proceed with the CPU.")
         for epoch in range(epochs):
             self.logger.info("epoch: %d", epoch)
             epoch_error = 0
@@ -121,10 +125,13 @@ class RBM:
         self.delta_hidden_bias = state["delta_hidden_bias"]
 
     def reconstruct(self, input):
+        input = np.array(input)
         sampled_hidden = self.sigmoid(input.dot(self.w) + self.hidden_bias)
         sampled_visible = self.sigmoid(
             sampled_hidden.dot(self.w.transpose()) + self.visible_bias
         )
+        if has_GPU:
+            sampled_visible = sampled_visible.get()
         return sampled_visible
 
     def get_hidden(self, input):

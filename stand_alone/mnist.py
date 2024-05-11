@@ -4,17 +4,7 @@ from PIL import Image
 import pickle
 import sys
 import os
-
-try:
-    import cupy as np
-
-    has_GPU = True
-    print("A GPGPU has been detected, so it will be used.")
-except ImportError:
-    import numpy as np
-
-    has_GPU = False
-    print("GPGPUs were not detected, so the computation will proceed with the CPU.")
+import numpy as np
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if base_dir not in sys.path:
