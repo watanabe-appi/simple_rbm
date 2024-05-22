@@ -15,13 +15,11 @@ class RBM:
         self.visible_num = visible_num
         self.hidden_num = hidden_num
 
-        self.w = np.array(self.xavier_init(
-            visible_num, hidden_num), dtype=np.float32)
+        self.w = np.array(self.xavier_init(visible_num, hidden_num), dtype=np.float32)
         self.visible_bias = np.zeros(visible_num, dtype=np.float32)
         self.hidden_bias = np.zeros(hidden_num, dtype=np.float32)
 
-        self.delta_w = np.zeros(
-            [self.visible_num, self.hidden_num], dtype=np.float32)
+        self.delta_w = np.zeros([self.visible_num, self.hidden_num], dtype=np.float32)
         self.delta_visible_bias = np.zeros(visible_num, dtype=np.float32)
         self.delta_hidden_bias = np.zeros(hidden_num, dtype=np.float32)
 
@@ -41,10 +39,10 @@ class RBM:
     def sample(self, expected_values):
         r = np.random.random(expected_values.shape)
         s = expected_values - r
-        #sampled_values = np.heaviside(s, 0)
-        # use tanh instead of heaviside, since old version 
+        # sampled_values = np.heaviside(s, 0)
+        # use tanh instead of heaviside, since old version
         # of CuPy does not support it
-        sampled_values = (np.tanh(s*100)+1.0)*0.5
+        sampled_values = (np.tanh(s * 100) + 1.0) * 0.5
         return sampled_values
 
     def apply_momentum(self, former_delta_w, new_grad):
@@ -54,11 +52,9 @@ class RBM:
         return (former_delta_w * momentum) + ((1 - momentum) * learning_rate * new_grad)
 
     def step(self, batch):
-        sampled_hidden = self.sample(self.sigmoid(
-            batch.dot(self.w) + self.hidden_bias))
+        sampled_hidden = self.sample(self.sigmoid(batch.dot(self.w) + self.hidden_bias))
         sampled_visible = self.sample(
-            self.sigmoid(sampled_hidden.dot(
-                self.w.transpose()) + self.visible_bias)
+            self.sigmoid(sampled_hidden.dot(self.w.transpose()) + self.visible_bias)
         )
         re_sampled_hidden = self.sample(
             self.sigmoid(sampled_visible.dot(self.w) + self.hidden_bias)
@@ -73,8 +69,7 @@ class RBM:
             self.delta_visible_bias, np.mean(batch - sampled_visible, axis=0)
         )
         self.delta_hidden_bias = self.apply_momentum(
-            self.delta_hidden_bias, np.mean(
-                sampled_hidden - re_sampled_hidden, axis=0)
+            self.delta_hidden_bias, np.mean(sampled_hidden - re_sampled_hidden, axis=0)
         )
 
         self.w += self.delta_w
@@ -89,7 +84,9 @@ class RBM:
         if has_GPU:
             self.logger.info("A GPGPU has been detected, so it will be used.")
         else:
-            self.logger.info("GPGPUs were not detected, so the computation will proceed with the CPU.")
+            self.logger.info(
+                "GPGPUs were not detected, so the computation will proceed with the CPU."
+            )
         for epoch in range(epochs):
             self.logger.info("epoch: %d", epoch)
             epoch_error = 0
@@ -103,8 +100,7 @@ class RBM:
                 batch_error = self.step(batch)
                 epoch_error += batch_error
 
-            self.logger.info("mean squared error: %f",
-                             epoch_error / batch_data_num)
+            self.logger.info("mean squared error: %f", epoch_error / batch_data_num)
 
     def get_state(self) -> Dict[str, np.ndarray]:
         return {
@@ -136,19 +132,22 @@ class RBM:
 
     def get_hidden(self, input):
         hidden = self.sigmoid(input.dot(self.w) + self.hidden_bias)
-
+        if has_GPU:
+            hidden = hidden.get()
         return hidden
 
     def sample_hidden(self, input_visible):
-        sampled_values = self.sample(self.sigmoid(
-            input_visible.dot(self.w) + self.hidden_bias))
-
+        sampled_values = self.sample(
+            self.sigmoid(input_visible.dot(self.w) + self.hidden_bias)
+        )
+        if has_GPU:
+            sampled_values = sampled_values.get()
         return sampled_values
 
     def sample_visible(self, input_hidden):
         sampled_values = self.sample(
-            self.sigmoid(input_hidden.dot(
-                self.w.transpose()) + self.visible_bias)
+            self.sigmoid(input_hidden.dot(self.w.transpose()) + self.visible_bias)
         )
-
+        if has_GPU:
+            sampled_values = sampled_values.get()
         return sampled_values
