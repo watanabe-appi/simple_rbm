@@ -103,22 +103,32 @@ class RBM:
             self.logger.info("mean squared error: %f", epoch_error / batch_data_num)
 
     def get_state(self) -> Dict[str, np.ndarray]:
-        return {
-            "w": self.w,
-            "visible_bias": self.visible_bias,
-            "hidden_bias": self.hidden_bias,
-            "delta_w": self.delta_w,
-            "delta_visible_bias": self.delta_visible_bias,
-            "delta_hidden_bias": self.delta_hidden_bias,
-        }
+        if has_GPU:
+            return {
+                "w": self.w.get(),
+                "visible_bias": self.visible_bias.get(),
+                "hidden_bias": self.hidden_bias.get(),
+                "delta_w": self.delta_w.get(),
+                "delta_visible_bias": self.delta_visible_bias.get(),
+                "delta_hidden_bias": self.delta_hidden_bias.get(),
+            }
+        else:
+            return {
+                "w": self.w,
+                "visible_bias": self.visible_bias,
+                "hidden_bias": self.hidden_bias,
+                "delta_w": self.delta_w,
+                "delta_visible_bias": self.delta_visible_bias,
+                "delta_hidden_bias": self.delta_hidden_bias,
+            }
 
     def set_state(self, state: Dict[str, np.ndarray]):
-        self.w = state["w"]
-        self.visible_bias = state["visible_bias"]
-        self.hidden_bias = state["hidden_bias"]
-        self.delta_w = state["delta_w"]
-        self.delta_visible_bias = state["delta_visible_bias"]
-        self.delta_hidden_bias = state["delta_hidden_bias"]
+        self.w = np.array(state["w"])
+        self.visible_bias = np.array(state["visible_bias"])
+        self.hidden_bias = np.array(state["hidden_bias"])
+        self.delta_w = np.array(state["delta_w"])
+        self.delta_visible_bias = np.array(state["delta_visible_bias"])
+        self.delta_hidden_bias = np.array(state["delta_hidden_bias"])
 
     def reconstruct(self, input):
         input = np.array(input)
