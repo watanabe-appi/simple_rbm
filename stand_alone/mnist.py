@@ -5,7 +5,6 @@ import pickle
 import sys
 import os
 import numpy as np
-import cupy as cp
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if base_dir not in sys.path:

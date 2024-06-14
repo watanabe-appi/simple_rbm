@@ -1,0 +1,25 @@
+INFO:RBM:A GPGPU has been detected, so it will be used.
+INFO:RBM:epoch: 0
+INFO:RBM:mean squared error: 0.197852
+INFO:RBM:epoch: 1
+INFO:RBM:mean squared error: 0.120890
+INFO:RBM:epoch: 2
+INFO:RBM:mean squared error: 0.109115
+INFO:RBM:epoch: 3
+INFO:RBM:mean squared error: 0.104399
+INFO:RBM:epoch: 4
+INFO:RBM:mean squared error: 0.102123
+INFO:RBM:epoch: 5
+INFO:RBM:mean squared error: 0.100814
+INFO:RBM:epoch: 6
+INFO:RBM:mean squared error: 0.100176
+INFO:RBM:epoch: 7
+INFO:RBM:mean squared error: 0.099742
+INFO:RBM:epoch: 8
+INFO:RBM:mean squared error: 0.099490
+INFO:RBM:epoch: 9
+INFO:RBM:mean squared error: 0.099307
+
+real	0m6.566s
+user	0m3.635s
+sys	0m9.435s
