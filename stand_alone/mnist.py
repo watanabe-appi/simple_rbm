@@ -53,4 +53,5 @@ def main():
 
 
 if __name__ == "__main__":
+    np.radom.seed(0)
     main()
