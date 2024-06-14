@@ -30,10 +30,6 @@ def main():
     rbm = RBM(visible_num=28 * 28, hidden_num=64)
     rbm.fit(x_train, epochs=10, batch_size=1000)
 
-    save_img("input.png", x_test[0])
-    output = rbm.reconstruct(x_test[:1])[0]
-    save_img("output.png", output)
-
     for i in range(10):
         save_img(f"input_{i}.png", x_test[i])
         output = rbm.reconstruct(x_test[i].reshape(1, 28 * 28))[0]

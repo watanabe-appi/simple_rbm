@@ -11,7 +11,8 @@ from typing import Dict
 
 
 class RBM:
-    def __init__(self, visible_num, hidden_num, learning_rate=0.001, momentum=0.95):
+    def __init__(self, visible_num, hidden_num, learning_rate=0.0001, momentum=0.95, seed=0):
+        np.random.seed(seed)
         self.visible_num = visible_num
         self.hidden_num = hidden_num
 
@@ -29,6 +30,7 @@ class RBM:
         self.momentum = momentum
 
         self.logger = logging.getLogger(self.__class__.__name__)
+
 
     def xavier_init(self, fan_in, fan_out, const=1.0, dtype=np.float32):
         k = const * np.sqrt(6.0 / (fan_in + fan_out))

@@ -5,6 +5,7 @@ import pickle
 import sys
 import os
 import numpy as np
+import cupy as cp
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if base_dir not in sys.path:
@@ -38,10 +39,6 @@ def main():
     rbm = RBM(visible_num=28 * 28, hidden_num=64)
     rbm.fit(x_train, epochs=10, batch_size=1000)
 
-    save_img("input.png", x_test[0])
-    output = rbm.reconstruct(x_test[:1])[0]
-    save_img("output.png", output)
-
     for i in range(10):
         save_img(f"input_{i}.png", x_test[i])
         output = rbm.reconstruct(x_test[i].reshape(1, 28 * 28))[0]
@@ -53,5 +50,4 @@ def main():
 
 
 if __name__ == "__main__":
-    np.random.seed(0)
     main()
