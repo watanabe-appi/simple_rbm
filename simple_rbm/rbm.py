@@ -31,7 +31,6 @@ class RBM:
 
         self.logger = logging.getLogger(self.__class__.__name__)
 
-
     def xavier_init(self, fan_in, fan_out, const=1.0, dtype=np.float32):
         k = const * np.sqrt(6.0 / (fan_in + fan_out))
 
@@ -160,6 +159,7 @@ class RBM:
         return hidden
 
     def sample_hidden(self, input_visible):
+        input_visible = np.array(input_visible)
         sampled_values = self.sample(
             self.sigmoid(input_visible.dot(self.w) + self.hidden_bias)
         )
@@ -168,6 +168,7 @@ class RBM:
         return sampled_values
 
     def sample_visible(self, input_hidden):
+        input_hidden = np.array(input_hidden)
         sampled_values = self.sample(
             self.sigmoid(input_hidden.dot(
                 self.w.transpose()) + self.visible_bias)
