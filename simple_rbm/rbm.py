@@ -193,3 +193,9 @@ class RBM:
         if has_GPU:
             expected_values = expected_values.get()
         return expected_values
+
+    def calculate_energy(self, visible, hidden):
+        energy = (visible.dot(self.w)).dot(hidden.transpose()) + self.visible_bias.dot(
+            visible.transpose()) + self.hidden_bias.dot(hidden.transpose())
+
+        return - energy[0][0]
