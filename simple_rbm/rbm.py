@@ -176,3 +176,20 @@ class RBM:
         if has_GPU:
             sampled_values = sampled_values.get()
         return sampled_values
+
+    def expect_hidden(self, input_visible):
+        input_visible = np.array(input_visible)
+        expected_values = self.sigmoid(
+            input_visible.dot(self.w) + self.hidden_bias)
+        if has_GPU:
+            expected_values = expected_values.get()
+        return expected_values
+
+    def expect_visible(self, input_hidden):
+        input_hidden = np.array(input_hidden)
+        expected_values = self.sigmoid(input_hidden.dot(
+            self.w.transpose()) + self.visible_bias
+        )
+        if has_GPU:
+            expected_values = expected_values.get()
+        return expected_values
