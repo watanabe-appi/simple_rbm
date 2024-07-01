@@ -195,6 +195,8 @@ class RBM:
         return expected_values
 
     def calculate_energy(self, visible, hidden):
+        visible = np.array(visible)
+        hidden = np.array(hidden)
         energy = (visible.dot(self.w)).dot(hidden.transpose()) + self.visible_bias.dot(
             visible.transpose()) + self.hidden_bias.dot(hidden.transpose())
 
