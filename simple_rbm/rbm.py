@@ -95,7 +95,7 @@ class RBM:
                     (1 - expected_visible)**(1 - batch), axis=1)
 
         q = np.ones(batch.shape[0]) / batch.shape[0]
-        error = np.sum(np.log(q / p))
+        error = np.sum(q * np.log(q / p))
 
         return error
 
