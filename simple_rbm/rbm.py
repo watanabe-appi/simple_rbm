@@ -119,7 +119,7 @@ class RBM:
                 batch_error = self.step(batch)
                 epoch_error += batch_error
 
-            self.logger.info("mean squared error: %f",
+            self.logger.info("KL divergence: %f",
                              epoch_error / batch_data_num)
 
     def get_state(self) -> Dict[str, np.ndarray]:
