@@ -87,7 +87,15 @@ class RBM:
         self.visible_bias += self.delta_visible_bias
         self.hidden_bias += self.delta_hidden_bias
 
-        error = np.mean(np.square(batch - sampled_visible))
+        # error = np.mean(np.square(batch - sampled_visible))
+
+        expected_visible = self.sigmoid(sampled_hidden.dot(
+            self.w.transpose()) + self.visible_bias)
+        p = np.prod(expected_visible**batch *
+                    (1 - expected_visible)**(1 - batch), axis=1)
+
+        q = np.ones(batch.shape[0]) / batch.shape[0]
+        error = np.sum(np.log(q / p))
 
         return error
 
