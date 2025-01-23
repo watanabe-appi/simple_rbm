@@ -101,13 +101,17 @@ class RBM:
 
     def fit(self, data_set, *, epochs=10, batch_size=1):
         if has_GPU:
-            self.logger.info("A GPGPU has been detected, so it will be used.")
+            print("A GPGPU has been detected, so it will be used.")
+            # self.logger.info("A GPGPU has been detected, so it will be used.")
         else:
-            self.logger.info(
-                "GPGPUs were not detected, so the computation will proceed with the CPU."
-            )
+            print(
+                "GPGPUs were not detected, so the computation will proceed with the CPU.")
+            # self.logger.info(
+            #     "GPGPUs were not detected, so the computation will proceed with the CPU."
+            # )
         for epoch in range(epochs):
-            self.logger.info("epoch: %d", epoch)
+            print(f"epoch: {epoch}")
+            # self.logger.info("epoch: %d", epoch)
             epoch_error = 0
 
             data_set = np.array(data_set)
@@ -119,8 +123,9 @@ class RBM:
                 batch_error = self.step(batch)
                 epoch_error += batch_error
 
-            self.logger.info("KL divergence: %f",
-                             epoch_error / batch_data_num)
+            print(f"KL divergence: {epoch_error / batch_data_num}")
+            # self.logger.info("KL divergence: %f",
+            #                  epoch_error / batch_data_num)
 
     def get_state(self) -> Dict[str, np.ndarray]:
         if has_GPU:
