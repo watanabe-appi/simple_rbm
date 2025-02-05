@@ -89,13 +89,24 @@ class RBM:
 
         # error = np.mean(np.square(batch - sampled_visible))
 
+        # expected_visible = self.sigmoid(sampled_hidden.dot(
+        #     self.w.transpose()) + self.visible_bias)
+        # p = np.prod(expected_visible**batch *
+        #             (1 - expected_visible)**(1 - batch), axis=1)
+
+        # q = np.ones(batch.shape[0]) / batch.shape[0]
+        # error = np.sum(q * np.log(q / p)) / batch.shape[1]
+
         expected_visible = self.sigmoid(sampled_hidden.dot(
             self.w.transpose()) + self.visible_bias)
-        p = np.prod(expected_visible**batch *
-                    (1 - expected_visible)**(1 - batch), axis=1)
+
+        log_p = np.sum(np.log(expected_visible**batch *
+                              (1 - expected_visible)**(1 - batch)), axis=1)
 
         q = np.ones(batch.shape[0]) / batch.shape[0]
-        error = np.sum(q * np.log(q / p)) / batch.shape[1]
+        log_q = np.log(np.ones(batch.shape[0]) / batch.shape[0])
+
+        error = np.sum(q * (log_q - log_p)) / batch.shape[1]
 
         return error
 
