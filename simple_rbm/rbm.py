@@ -10,19 +10,24 @@ import logging
 from typing import Dict
 
 
+def maybe_get(x):
+    """If x is a cupy.ndarray, return x.get(); otherwise, return x unchanged."""
+    return x.get() if hasattr(x, "get") else x
+
+
 class RBM:
-    def __init__(self, visible_num, hidden_num, learning_rate=0.0001, momentum=0.95, seed=0):
+    def __init__(
+        self, visible_num, hidden_num, learning_rate=0.0001, momentum=0.95, seed=0
+    ):
         np.random.seed(seed)
         self.visible_num = visible_num
         self.hidden_num = hidden_num
 
-        self.w = np.array(self.xavier_init(
-            visible_num, hidden_num), dtype=np.float32)
+        self.w = np.array(self.xavier_init(visible_num, hidden_num), dtype=np.float32)
         self.visible_bias = np.zeros(visible_num, dtype=np.float32)
         self.hidden_bias = np.zeros(hidden_num, dtype=np.float32)
 
-        self.delta_w = np.zeros(
-            [self.visible_num, self.hidden_num], dtype=np.float32)
+        self.delta_w = np.zeros([self.visible_num, self.hidden_num], dtype=np.float32)
         self.delta_visible_bias = np.zeros(visible_num, dtype=np.float32)
         self.delta_hidden_bias = np.zeros(hidden_num, dtype=np.float32)
 
@@ -60,11 +65,9 @@ class RBM:
         return (former_delta_w * momentum) + ((1 - momentum) * learning_rate * new_grad)
 
     def step(self, batch):
-        sampled_hidden = self.sample(self.sigmoid(
-            batch.dot(self.w) + self.hidden_bias))
+        sampled_hidden = self.sample(self.sigmoid(batch.dot(self.w) + self.hidden_bias))
         sampled_visible = self.sample(
-            self.sigmoid(sampled_hidden.dot(
-                self.w.transpose()) + self.visible_bias)
+            self.sigmoid(sampled_hidden.dot(self.w.transpose()) + self.visible_bias)
         )
         re_sampled_hidden = self.sample(
             self.sigmoid(sampled_visible.dot(self.w) + self.hidden_bias)
@@ -79,8 +82,7 @@ class RBM:
             self.delta_visible_bias, np.mean(batch - sampled_visible, axis=0)
         )
         self.delta_hidden_bias = self.apply_momentum(
-            self.delta_hidden_bias, np.mean(
-                sampled_hidden - re_sampled_hidden, axis=0)
+            self.delta_hidden_bias, np.mean(sampled_hidden - re_sampled_hidden, axis=0)
         )
 
         self.w += self.delta_w
@@ -97,11 +99,14 @@ class RBM:
         # q = np.ones(batch.shape[0]) / batch.shape[0]
         # error = np.sum(q * np.log(q / p)) / batch.shape[1]
 
-        expected_visible = self.sigmoid(sampled_hidden.dot(
-            self.w.transpose()) + self.visible_bias)
+        expected_visible = self.sigmoid(
+            sampled_hidden.dot(self.w.transpose()) + self.visible_bias
+        )
 
-        log_p = np.sum(np.log(expected_visible**batch *
-                              (1 - expected_visible)**(1 - batch)), axis=1)
+        log_p = np.sum(
+            np.log(expected_visible**batch * (1 - expected_visible) ** (1 - batch)),
+            axis=1,
+        )
 
         q = np.ones(batch.shape[0]) / batch.shape[0]
         log_q = np.log(np.ones(batch.shape[0]) / batch.shape[0])
@@ -116,7 +121,8 @@ class RBM:
             # self.logger.info("A GPGPU has been detected, so it will be used.")
         else:
             print(
-                "GPGPUs were not detected, so the computation will proceed with the CPU.")
+                "GPGPUs were not detected, so the computation will proceed with the CPU."
+            )
             # self.logger.info(
             #     "GPGPUs were not detected, so the computation will proceed with the CPU."
             # )
@@ -139,24 +145,14 @@ class RBM:
             #                  epoch_error / batch_data_num)
 
     def get_state(self) -> Dict[str, np.ndarray]:
-        if has_GPU:
-            return {
-                "w": self.w.get(),
-                "visible_bias": self.visible_bias.get(),
-                "hidden_bias": self.hidden_bias.get(),
-                "delta_w": self.delta_w.get(),
-                "delta_visible_bias": self.delta_visible_bias.get(),
-                "delta_hidden_bias": self.delta_hidden_bias.get(),
-            }
-        else:
-            return {
-                "w": self.w,
-                "visible_bias": self.visible_bias,
-                "hidden_bias": self.hidden_bias,
-                "delta_w": self.delta_w,
-                "delta_visible_bias": self.delta_visible_bias,
-                "delta_hidden_bias": self.delta_hidden_bias,
-            }
+        return {
+            "w": maybe_get(self.w),
+            "visible_bias": maybe_get(self.visible_bias),
+            "hidden_bias": maybe_get(self.hidden_bias),
+            "delta_w": maybe_get(self.delta_w),
+            "delta_visible_bias": maybe_get(self.delta_visible_bias),
+            "delta_hidden_bias": maybe_get(self.delta_hidden_bias),
+        }
 
     def set_state(self, state: Dict[str, np.ndarray]):
         self.w = np.array(state["w"])
@@ -172,56 +168,45 @@ class RBM:
         sampled_visible = self.sigmoid(
             sampled_hidden.dot(self.w.transpose()) + self.visible_bias
         )
-        if has_GPU:
-            sampled_visible = sampled_visible.get()
-        return sampled_visible
+        return maybe_get(sampled_visible)
 
     def get_hidden(self, input):
         hidden = self.sigmoid(input.dot(self.w) + self.hidden_bias)
-        if has_GPU:
-            hidden = hidden.get()
-        return hidden
+        return maybe_get(hidden)
 
     def sample_hidden(self, input_visible):
         input_visible = np.array(input_visible)
         sampled_values = self.sample(
             self.sigmoid(input_visible.dot(self.w) + self.hidden_bias)
         )
-        if has_GPU:
-            sampled_values = sampled_values.get()
-        return sampled_values
+        return maybe_get(sampled_values)
 
     def sample_visible(self, input_hidden):
         input_hidden = np.array(input_hidden)
         sampled_values = self.sample(
-            self.sigmoid(input_hidden.dot(
-                self.w.transpose()) + self.visible_bias)
+            self.sigmoid(input_hidden.dot(self.w.transpose()) + self.visible_bias)
         )
-        if has_GPU:
-            sampled_values = sampled_values.get()
-        return sampled_values
+        return maybe_get(sampled_values)
 
     def expect_hidden(self, input_visible):
         input_visible = np.array(input_visible)
-        expected_values = self.sigmoid(
-            input_visible.dot(self.w) + self.hidden_bias)
-        if has_GPU:
-            expected_values = expected_values.get()
-        return expected_values
+        expected_values = self.sigmoid(input_visible.dot(self.w) + self.hidden_bias)
+        return maybe_get(expected_values)
 
     def expect_visible(self, input_hidden):
         input_hidden = np.array(input_hidden)
-        expected_values = self.sigmoid(input_hidden.dot(
-            self.w.transpose()) + self.visible_bias
+        expected_values = self.sigmoid(
+            input_hidden.dot(self.w.transpose()) + self.visible_bias
         )
-        if has_GPU:
-            expected_values = expected_values.get()
-        return expected_values
+        return maybe_get(expected_values)
 
     def calculate_energy(self, visible, hidden):
         visible = np.array(visible)
         hidden = np.array(hidden)
-        energy = (visible.dot(self.w)).dot(hidden.transpose()) + self.visible_bias.dot(
-            visible.transpose()) + self.hidden_bias.dot(hidden.transpose())
+        energy = (
+            (visible.dot(self.w)).dot(hidden.transpose())
+            + self.visible_bias.dot(visible.transpose())
+            + self.hidden_bias.dot(hidden.transpose())
+        )
 
-        return - energy[0][0]
+        return -energy[0][0]
