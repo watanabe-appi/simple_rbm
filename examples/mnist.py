@@ -1,5 +1,4 @@
 import tensorflow as tf
-import logging
 from PIL import Image
 import pickle
 from simple_rbm import RBM
@@ -18,8 +17,7 @@ def save_img(filename, data):
     img2.save(filename)
 
 
-def main():
-    logging.basicConfig(level=logging.INFO)
+def main(use_GPU=False):
     (x_train, _), (x_test, _) = tf.keras.datasets.mnist.load_data()
 
     x_train = np.array(x_train) / 255
@@ -27,7 +25,7 @@ def main():
     x_train = x_train.reshape(-1, 28 * 28).astype(np.float32)
     x_test = x_test.reshape(-1, 28 * 28).astype(np.float32)
 
-    rbm = RBM(visible_num=28 * 28, hidden_num=64)
+    rbm = RBM(visible_num=28 * 28, hidden_num=64, use_GPU=use_GPU)
     rbm.fit(x_train, epochs=10, batch_size=1000)
 
     for i in range(10):
@@ -41,4 +39,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(use_GPU=False)
