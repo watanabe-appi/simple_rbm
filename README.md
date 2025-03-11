@@ -31,6 +31,7 @@ On MacOSX, you should explicitly use Python 3.11.
 git clone git@github.com:watanabe-appi/simple_rbm.git 
 cd simple_rbm
 python3.11 -m venv .venv 
+source .venv/bin/activate
 python3 -m pip install --upgrade pip
 python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
 python3 -m pip install tensorflow Pillow pickles
