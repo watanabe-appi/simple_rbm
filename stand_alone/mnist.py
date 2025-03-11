@@ -12,6 +12,7 @@ if base_dir not in sys.path:
 
 from simple_rbm import RBM
 
+
 def save_img(filename, data):
     data = np.array(data)
     data = data.reshape((28, 28))
@@ -23,6 +24,7 @@ def save_img(filename, data):
             pix[i, j] = int(data[j][i])
     img2 = img.resize((28 * 5, 28 * 5))
     img2.save(filename)
+
 
 def main(use_GPU=False):
     (x_train, _), (x_test, _) = tf.keras.datasets.mnist.load_data()
@@ -46,7 +48,11 @@ def main(use_GPU=False):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run MNIST training with optional GPU usage.")
-    parser.add_argument("--use-gpu", action="store_true", help="Enable GPU computation.")
+    parser = argparse.ArgumentParser(
+        description="Run MNIST training with optional GPU usage."
+    )
+    parser.add_argument(
+        "--use-gpu", action="store_true", help="Enable GPU computation."
+    )
     args = parser.parse_args()
     main(use_GPU=args.use_gpu)

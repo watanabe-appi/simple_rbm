@@ -3,6 +3,8 @@ from PIL import Image
 import pickle
 from simple_rbm import RBM
 import numpy as np
+import argparse
+
 
 def save_img(filename, data):
     data = np.array(data)
@@ -39,4 +41,11 @@ def main(use_GPU=False):
 
 
 if __name__ == "__main__":
-    main(use_GPU=False)
+    parser = argparse.ArgumentParser(
+        description="Run MNIST training with optional GPU usage."
+    )
+    parser.add_argument(
+        "--use-gpu", action="store_true", help="Enable GPU computation."
+    )
+    args = parser.parse_args()
+    main(use_GPU=args.use_gpu)

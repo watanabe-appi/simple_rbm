@@ -11,6 +11,8 @@ python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
 
 ## Test this repository
 
+Setup.
+
 ```sh
 git clone git@github.com:watanabe-appi/simple_rbm.git 
 cd simple_rbm
@@ -19,8 +21,20 @@ source .venv/bin/activate
 python3 -m pip install --upgrade pip
 python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
 python3 -m pip install tensorflow Pillow pickles
+```
+
+Run a sample code.
+
+```sh
 cd examples
 python3 mnist.py
+```
+
+If you have GPGPU and CuPy is installed, you can use it with `--use-gpu` option.
+
+```sh
+cd examples
+python3 mnist.py --use-gpu
 ```
 
 ## Use on Mac
@@ -64,7 +78,7 @@ module purge
 module load cuda/11.2
 source .venv/bin/activate
 cd examples
-python3 mnist.py
+python3 mnist.py --use-gpu
 ```
 
 ## License
