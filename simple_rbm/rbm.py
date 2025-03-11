@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Dict
 
 class RBM:
     def __init__(self, visible_num, hidden_num, learning_rate=0.0001, momentum=0.95, seed=0, use_GPU = False):
@@ -120,7 +121,7 @@ class RBM:
 
             print(f"{epoch} {epoch_error / batch_data_num}")
 
-    def get_state(self) -> dict[str, np.ndarray]:
+    def get_state(self) -> Dict[str, np.ndarray]:
         if self.use_GPU:
             return {
                 "w": self.w.get(),
@@ -140,7 +141,7 @@ class RBM:
                 "delta_hidden_bias": self.delta_hidden_bias,
             }
 
-    def set_state(self, state: dict[str, np.ndarray]):
+    def set_state(self, state: Dict[str, np.ndarray]):
         self.w = self.np.array(state["w"])
         self.visible_bias = self.np.array(state["visible_bias"])
         self.hidden_bias = self.np.array(state["hidden_bias"])
