@@ -11,18 +11,18 @@ from typing import Dict
 
 
 class RBM:
-    def __init__(self, visible_num, hidden_num, learning_rate=0.0001, momentum=0.95, seed=0):
+    def __init__(
+        self, visible_num, hidden_num, learning_rate=0.0001, momentum=0.95, seed=0
+    ):
         np.random.seed(seed)
         self.visible_num = visible_num
         self.hidden_num = hidden_num
 
-        self.w = np.array(self.xavier_init(
-            visible_num, hidden_num), dtype=np.float32)
+        self.w = np.array(self.xavier_init(visible_num, hidden_num), dtype=np.float32)
         self.visible_bias = np.zeros(visible_num, dtype=np.float32)
         self.hidden_bias = np.zeros(hidden_num, dtype=np.float32)
 
-        self.delta_w = np.zeros(
-            [self.visible_num, self.hidden_num], dtype=np.float32)
+        self.delta_w = np.zeros([self.visible_num, self.hidden_num], dtype=np.float32)
         self.delta_visible_bias = np.zeros(visible_num, dtype=np.float32)
         self.delta_hidden_bias = np.zeros(hidden_num, dtype=np.float32)
 
@@ -60,11 +60,12 @@ class RBM:
         return (former_delta_w * momentum) + ((1 - momentum) * learning_rate * new_grad)
 
     def step(self, batch):
-        sampled_hidden = self.sample(self.sigmoid(
-            batch.dot(self.w) + self.hidden_bias))
+        print(batch.shape)
+        print(self.w.shape)
+        exit(0)
+        sampled_hidden = self.sample(self.sigmoid(batch.dot(self.w) + self.hidden_bias))
         sampled_visible = self.sample(
-            self.sigmoid(sampled_hidden.dot(
-                self.w.transpose()) + self.visible_bias)
+            self.sigmoid(sampled_hidden.dot(self.w.transpose()) + self.visible_bias)
         )
         re_sampled_hidden = self.sample(
             self.sigmoid(sampled_visible.dot(self.w) + self.hidden_bias)
@@ -79,8 +80,7 @@ class RBM:
             self.delta_visible_bias, np.mean(batch - sampled_visible, axis=0)
         )
         self.delta_hidden_bias = self.apply_momentum(
-            self.delta_hidden_bias, np.mean(
-                sampled_hidden - re_sampled_hidden, axis=0)
+            self.delta_hidden_bias, np.mean(sampled_hidden - re_sampled_hidden, axis=0)
         )
 
         self.w += self.delta_w
@@ -111,8 +111,7 @@ class RBM:
                 batch_error = self.step(batch)
                 epoch_error += batch_error
 
-            self.logger.info("mean squared error: %f",
-                             epoch_error / batch_data_num)
+            self.logger.info("mean squared error: %f", epoch_error / batch_data_num)
 
     def get_state(self) -> Dict[str, np.ndarray]:
         if has_GPU:
@@ -170,8 +169,7 @@ class RBM:
     def sample_visible(self, input_hidden):
         input_hidden = np.array(input_hidden)
         sampled_values = self.sample(
-            self.sigmoid(input_hidden.dot(
-                self.w.transpose()) + self.visible_bias)
+            self.sigmoid(input_hidden.dot(self.w.transpose()) + self.visible_bias)
         )
         if has_GPU:
             sampled_values = sampled_values.get()
@@ -179,16 +177,15 @@ class RBM:
 
     def expect_hidden(self, input_visible):
         input_visible = np.array(input_visible)
-        expected_values = self.sigmoid(
-            input_visible.dot(self.w) + self.hidden_bias)
+        expected_values = self.sigmoid(input_visible.dot(self.w) + self.hidden_bias)
         if has_GPU:
             expected_values = expected_values.get()
         return expected_values
 
     def expect_visible(self, input_hidden):
         input_hidden = np.array(input_hidden)
-        expected_values = self.sigmoid(input_hidden.dot(
-            self.w.transpose()) + self.visible_bias
+        expected_values = self.sigmoid(
+            input_hidden.dot(self.w.transpose()) + self.visible_bias
         )
         if has_GPU:
             expected_values = expected_values.get()
@@ -197,7 +194,10 @@ class RBM:
     def calculate_energy(self, visible, hidden):
         visible = np.array(visible)
         hidden = np.array(hidden)
-        energy = (visible.dot(self.w)).dot(hidden.transpose()) + self.visible_bias.dot(
-            visible.transpose()) + self.hidden_bias.dot(hidden.transpose())
+        energy = (
+            (visible.dot(self.w)).dot(hidden.transpose())
+            + self.visible_bias.dot(visible.transpose())
+            + self.hidden_bias.dot(hidden.transpose())
+        )
 
-        return - energy[0][0]
+        return -energy[0][0]
