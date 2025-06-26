@@ -1,10 +1,10 @@
 import tensorflow as tf
-import logging
 from PIL import Image
 import pickle
 import sys
 import os
 import numpy as np
+import argparse
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if base_dir not in sys.path:
@@ -26,8 +26,7 @@ def save_img(filename, data):
     img2.save(filename)
 
 
-def main():
-    logging.basicConfig(level=logging.INFO)
+def main(use_GPU=False):
     (x_train, _), (x_test, _) = tf.keras.datasets.mnist.load_data()
 
     x_train = np.array(x_train) / 255
@@ -35,7 +34,7 @@ def main():
     x_train = x_train.reshape(-1, 28 * 28).astype(np.float32)
     x_test = x_test.reshape(-1, 28 * 28).astype(np.float32)
 
-    rbm = RBM(visible_num=28 * 28, hidden_num=64)
+    rbm = RBM(visible_num=28 * 28, hidden_num=64, use_GPU=use_GPU)
     rbm.fit(x_train, epochs=10, batch_size=1000)
 
     for i in range(10):
@@ -49,4 +48,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="Run MNIST training with optional GPU usage."
+    )
+    parser.add_argument(
+        "--use-gpu", action="store_true", help="Enable GPU computation."
+    )
+    args = parser.parse_args()
+    main(use_GPU=args.use_gpu)
