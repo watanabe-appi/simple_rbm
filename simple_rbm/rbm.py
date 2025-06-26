@@ -1,20 +1,29 @@
 import numpy as np
 from typing import Dict
 
+
 class RBM:
-    def __init__(self, visible_num, hidden_num, learning_rate=0.0001, momentum=0.95, seed=0, use_GPU = False):
+    def __init__(
+        self,
+        visible_num,
+        hidden_num,
+        learning_rate=0.0001,
+        momentum=0.95,
+        seed=0,
+        use_GPU=False,
+    ):
 
         self.np = np
         self.use_GPU = use_GPU
         if self.use_GPU:
             try:
                 import cupy as cp
+
                 self.np = cp
             except ImportError:
                 raise RuntimeError("CuPy is not installed.")
 
         self.np.random.seed(seed)
-
 
         self.visible_num = visible_num
         self.hidden_num = hidden_num
@@ -24,18 +33,20 @@ class RBM:
         self.hidden_bias = self.np.zeros(hidden_num, dtype=self.np.float32)
 
         self.delta_w = self.np.zeros(
-            [self.visible_num, self.hidden_num], dtype=self.np.float32)
+            [self.visible_num, self.hidden_num], dtype=self.np.float32
+        )
         self.delta_visible_bias = self.np.zeros(visible_num, dtype=self.np.float32)
         self.delta_hidden_bias = self.np.zeros(hidden_num, dtype=self.np.float32)
 
         self.learning_rate = learning_rate
         self.momentum = momentum
 
-
     def xavier_init(self, fan_in, fan_out, const=1.0):
         k = const * self.np.sqrt(6.0 / (fan_in + fan_out))
 
-        return self.np.random.uniform(-k, k, size=(fan_in, fan_out)).astype(self.np.float32)
+        return self.np.random.uniform(-k, k, size=(fan_in, fan_out)).astype(
+            self.np.float32
+        )
 
     def sigmoid(self, x):
         return 1 / (1 + self.np.exp(-x))
@@ -81,19 +92,24 @@ class RBM:
             self.delta_visible_bias, self.np.mean(batch - sampled_visible, axis=0)
         )
         self.delta_hidden_bias = self.apply_momentum(
-            self.delta_hidden_bias, self.np.mean(
-                sampled_hidden - re_sampled_hidden, axis=0)
+            self.delta_hidden_bias,
+            self.np.mean(sampled_hidden - re_sampled_hidden, axis=0),
         )
 
         self.w += self.delta_w
         self.visible_bias += self.delta_visible_bias
         self.hidden_bias += self.delta_hidden_bias
 
-        expected_visible = self.sigmoid(sampled_hidden.dot(
-            self.w.transpose()) + self.visible_bias)
+        expected_visible = self.sigmoid(
+            sampled_hidden.dot(self.w.transpose()) + self.visible_bias
+        )
 
-        log_p = self.np.sum(self.np.log(expected_visible**batch *
-                              (1 - expected_visible)**(1 - batch)), axis=1)
+        log_p = self.np.sum(
+            self.np.log(
+                expected_visible**batch * (1 - expected_visible) ** (1 - batch)
+            ),
+            axis=1,
+        )
 
         q = self.np.ones(batch.shape[0]) / batch.shape[0]
         log_q = self.np.log(self.np.ones(batch.shape[0]) / batch.shape[0])
@@ -120,11 +136,7 @@ class RBM:
                 batch_error = self.step(batch)
                 epoch_error += batch_error
 
-<<<<<<< HEAD
-            self.logger.info("mean squared error: %f", epoch_error / batch_data_num)
-=======
             print(f"{epoch} {epoch_error / batch_data_num}")
->>>>>>> refs/remotes/origin/main
 
     def get_state(self) -> Dict[str, np.ndarray]:
         if self.use_GPU:
@@ -190,16 +202,15 @@ class RBM:
 
     def expect_hidden(self, input_visible):
         input_visible = self.np.array(input_visible)
-        expected_values = self.sigmoid(
-            input_visible.dot(self.w) + self.hidden_bias)
+        expected_values = self.sigmoid(input_visible.dot(self.w) + self.hidden_bias)
         if self.use_GPU:
             expected_values = expected_values.get()
         return expected_values
 
     def expect_visible(self, input_hidden):
         input_hidden = self.np.array(input_hidden)
-        expected_values = self.sigmoid(input_hidden.dot(
-            self.w.transpose()) + self.visible_bias
+        expected_values = self.sigmoid(
+            input_hidden.dot(self.w.transpose()) + self.visible_bias
         )
         if self.use_GPU:
             expected_values = expected_values.get()
@@ -208,7 +219,10 @@ class RBM:
     def calculate_energy(self, visible, hidden):
         visible = self.np.array(visible)
         hidden = self.np.array(hidden)
-        energy = (visible.dot(self.w)).dot(hidden.transpose()) + self.visible_bias.dot(
-            visible.transpose()) + self.hidden_bias.dot(hidden.transpose())
+        energy = (
+            (visible.dot(self.w)).dot(hidden.transpose())
+            + self.visible_bias.dot(visible.transpose())
+            + self.hidden_bias.dot(hidden.transpose())
+        )
 
         return -energy[0][0]
