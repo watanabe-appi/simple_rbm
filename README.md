@@ -1,59 +1,86 @@
 # Simple implementation of Restricted Boltzmann Machine (RBM)
 
+A tiny, educational implementation of a Restricted Boltzmann Machine (RBM).
+
+## Features
+
+* Implemented with NumPy only.
+* Optional GPU acceleration: seamlessly switches to CuPy when available (--use-gpu in examples).
+* Clean, readable code intended for learning and small experiments.
+
 ## Install
 
+### Install from GitHub (recommended)
+
 ```sh
-python3 -m venv .venv 
+python3 -m venv .venv
 source .venv/bin/activate
-python3 -m pip install --upgrade pip
-python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
+python -m pip install --upgrade pip
+
+# install the library from GitHub via HTTPS
+python -m pip install git+https://github.com/watanabe-appi/simple_rbm.git
 ```
 
-## Test this repository
-
-Setup.
+### Local editable install
 
 ```sh
-git clone git@github.com:watanabe-appi/simple_rbm.git 
+git clone https://github.com/watanabe-appi/simple_rbm.git
 cd simple_rbm
-python3 -m venv .venv 
+python3 -m venv .venv
 source .venv/bin/activate
-python3 -m pip install --upgrade pip
-python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
-python3 -m pip install tensorflow Pillow pickles
+python -m pip install --upgrade pip
+python -m pip install -e .
 ```
 
-Run a sample code.
+### GPU Acceleration (Optional, via CuPy)
+
+if you have CUDA and want GPU acceleration:
+* CUDA 11.2: python -m pip install cupy-cuda112
+* CUDA 11.8: python -m pip install cupy-cuda118
+* CUDA 12.x: python -m pip install cupy-cuda12x
+
+Then run examples with `--use-gpu`.
+
+## Quickstart: MNIST Example
 
 ```sh
-cd examples
-python3 mnist.py
-```
-
-If you have GPGPU and CuPy is installed, you can use it with `--use-gpu` option.
-
-```sh
-cd examples
-python3 mnist.py --use-gpu
-```
-
-## Use on Mac
-
-On MacOSX, you should explicitly use Python 3.11.
-
-```sh
-git clone git@github.com:watanabe-appi/simple_rbm.git 
+# clone (if not already)
+git clone https://github.com/watanabe-appi/simple_rbm.git
 cd simple_rbm
-python3.11 -m venv .venv 
 source .venv/bin/activate
-python3 -m pip install --upgrade pip
-python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
-python3 -m pip install tensorflow Pillow pickles
+
+# (optional) install example deps
+python -m pip install "tensorflow>=2" Pillow
+
+# run (CPU)
 cd examples
-python3 mnist.py
+python mnist.py
+
+# run (GPU, if CuPy is installed)
+python mnist.py --use-gpu
 ```
 
-## Use on ISSP System C
+### macOS Notes
+
+On macOS, Python **3.11** is recommended.
+
+```sh
+git clone https://github.com/watanabe-appi/simple_rbm.git
+cd simple_rbm
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e .
+
+# (optional for examples)
+python -m pip install "tensorflow>=2" Pillow
+
+cd examples
+python mnist.py
+
+```
+
+### ISSP System C (University of Tokyo) Example
 
 Setup.
 
@@ -70,7 +97,7 @@ python3 -m pip install cupy-cuda112
 python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
 ```
 
-Execute on an ACC node.
+Run on an ACC node
 
 ```sh
 qsub -I -q i1accs -l select=1:ncpus=64
@@ -84,3 +111,7 @@ python3 mnist.py --use-gpu
 ## License
 
 MIT
+
+## Acknowledgement
+
+If you use this code in academic work, a simple citation in the text (or a software reference in your appendix) would be greatly appreciated.
