@@ -1,10 +1,9 @@
-import os
+from pathlib import Path
 import argparse
 import sys
 
-base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if base_dir not in sys.path:
-    sys.path.append(base_dir)
+root = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(root)) 
 
 from simple_rbm import RBM
 from examples.mnist import do_fit

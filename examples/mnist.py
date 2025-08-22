@@ -38,7 +38,7 @@ def do_fit(rbm):
         save_img(f"output_{i}.png", output)
 
     params = rbm.get_state()
-    with open("params_test.pkl", mode="wb") as f:
+    with open("rbm_mnist.pkl", mode="wb") as f:
         pickle.dump(params, f)
 
 

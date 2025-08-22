@@ -50,34 +50,31 @@ cd simple_rbm
 source .venv/bin/activate
 
 # (optional) install example deps
-python -m pip install "tensorflow>=2" Pillow
+python3 -m pip install tensorflow Pillow
 
 # run (CPU)
 cd examples
-python mnist.py
+python3 mnist.py
 
 # run (GPU, if CuPy is installed)
-python mnist.py --use-gpu
+python3 mnist.py --use-gpu
 ```
 
 ### macOS Notes
 
-On macOS, Python **3.11** is recommended.
+On macOS, Python **3.11** is required to use TensorFlow.
 
 ```sh
 git clone https://github.com/watanabe-appi/simple_rbm.git
 cd simple_rbm
 python3.11 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -e .
-
-# (optional for examples)
-python -m pip install "tensorflow>=2" Pillow
+python3 -m pip install --upgrade pip
+python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
+python3 -m pip install tensorflow Pillow
 
 cd examples
 python mnist.py
-
 ```
 
 ### ISSP System C (University of Tokyo) Example

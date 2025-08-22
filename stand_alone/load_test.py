@@ -5,11 +5,16 @@ import numpy as np
 import sys
 import os
 
-base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if base_dir not in sys.path:
-    sys.path.append(base_dir)
+from pathlib import Path
+import argparse
+import sys
+
+root = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(root)) 
 
 from simple_rbm import RBM
+from examples.mnist import do_fit
+
 
 
 def save_img(filename, data):
@@ -34,7 +39,7 @@ def main():
     x_test = x_test.reshape(-1, 28 * 28).astype(np.float32)
 
     rbm = RBM(visible_num=28 * 28, hidden_num=64)
-    filename = "params_test.pkl"
+    filename = "rbm_mnist.pkl"
     with open(filename, mode="rb") as f:
         state = pickle.load(f)
     print(f"Model {filename} was loaded.")
