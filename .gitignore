@@ -1,2 +1,4 @@
 .venv
+simple_rbm.egg-info
+loss.dat
 __pycache__
