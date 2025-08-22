@@ -18,7 +18,7 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 
 # install the library from GitHub via HTTPS
-python -m pip install git+https://github.com/watanabe-appi/simple_rbm.git
+python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
 ```
 
 ### Local editable install
