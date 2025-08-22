@@ -22,15 +22,13 @@ def save_img(filename, data):
     img2.save(filename)
 
 
-def main(use_GPU=False):
+def do_fit(rbm):
     (x_train, _), (x_test, _) = tf.keras.datasets.mnist.load_data()
 
     x_train = np.array(x_train) / 255
     x_test = np.array(x_test) / 255
     x_train = x_train.reshape(-1, 28 * 28).astype(np.float32)
     x_test = x_test.reshape(-1, 28 * 28).astype(np.float32)
-
-    rbm = RBM(visible_num=28 * 28, hidden_num=64, use_GPU=use_GPU)
     rbm.fit(x_train, epochs=10, batch_size=1000)
     rbm.save_loss()
 
@@ -44,7 +42,7 @@ def main(use_GPU=False):
         pickle.dump(params, f)
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="Run MNIST training with optional GPU usage."
     )
@@ -52,4 +50,10 @@ if __name__ == "__main__":
         "--use-gpu", action="store_true", help="Enable GPU computation."
     )
     args = parser.parse_args()
-    main(use_GPU=args.use_gpu)
+    use_GPU = args.use_gpu
+    rbm = RBM(visible_num=28 * 28, hidden_num=64, use_GPU=use_GPU)
+    do_fit(rbm)
+
+
+if __name__ == "__main__":
+    main()
