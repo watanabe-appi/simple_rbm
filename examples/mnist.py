@@ -3,7 +3,6 @@ import os
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import tensorflow as tf
 from PIL import Image
-import pickle
 from simple_rbm import RBM
 import numpy as np
 import argparse
@@ -31,15 +30,12 @@ def do_fit(rbm):
     x_test = x_test.reshape(-1, 28 * 28).astype(np.float32)
     rbm.fit(x_train, epochs=10, batch_size=1000)
     rbm.save_loss()
+    rbm.save("rbm_mnist.pkl")
 
     for i in range(10):
         save_img(f"input_{i}.png", x_test[i])
         output = rbm.reconstruct(x_test[i].reshape(1, 28 * 28))[0]
         save_img(f"output_{i}.png", output)
-
-    params = rbm.get_state()
-    with open("rbm_mnist.pkl", mode="wb") as f:
-        pickle.dump(params, f)
 
 
 def main():
