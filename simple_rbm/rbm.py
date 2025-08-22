@@ -1,5 +1,8 @@
 import numpy as np
 from typing import Dict
+import pickle
+from pathlib import Path
+from typing import Any, Dict
 
 
 class RBM:
@@ -24,7 +27,7 @@ class RBM:
                 raise RuntimeError("CuPy is not installed.")
 
         self.np.random.seed(seed)
-
+        self.loss_history = {}
         self.visible_num = visible_num
         self.hidden_num = hidden_num
 
@@ -72,9 +75,6 @@ class RBM:
         return (former_delta_w * momentum) + ((1 - momentum) * learning_rate * new_grad)
 
     def step(self, batch):
-        print(batch.shape)
-        print(self.w.shape)
-        exit(0)
         sampled_hidden = self.sample(self.sigmoid(batch.dot(self.w) + self.hidden_bias))
         sampled_visible = self.sample(
             self.sigmoid(sampled_hidden.dot(self.w.transpose()) + self.visible_bias)
@@ -119,14 +119,14 @@ class RBM:
         return error
 
     def fit(self, data_set, *, epochs=10, batch_size=1):
+        self.loss_history["epoch"] = []
+        self.loss_history["kl_divergence"] = []
         if self.use_GPU:
             print("# GPU usage has been enabled. Computation will proceed on the GPU.")
         else:
             print("# Computation will proceed on the CPU.")
-        print("# Epoch divergence")
         for epoch in range(epochs):
             epoch_error = 0
-
             data_set = self.np.array(data_set)
             self.np.random.shuffle(data_set)
             batch_data = self.np.array_split(data_set, len(data_set) // batch_size)
@@ -135,8 +135,10 @@ class RBM:
             for batch in batch_data:
                 batch_error = self.step(batch)
                 epoch_error += batch_error
-
-            print(f"{epoch} {epoch_error / batch_data_num}")
+            divergence = epoch_error / batch_data_num
+            self.loss_history["epoch"].append(epoch + 1)
+            self.loss_history["kl_divergence"].append(divergence)
+            print(f"Epoch [{epoch+1}/{epochs}], KL Divergence: {divergence:.4f}")
 
     def get_state(self) -> Dict[str, np.ndarray]:
         if self.use_GPU:
@@ -226,3 +228,30 @@ class RBM:
         )
 
         return -energy[0][0]
+
+    def save(self, filename: str | Path) -> None:
+        path = Path(filename)
+        if path.parent:
+            path.parent.mkdir(parents=True, exist_ok=True)
+        state = self.get_state()
+        with open(path, "wb") as f:
+            pickle.dump(state, f)
+        print(f"Model state saved to {path}.")
+
+    def load(self, filename: str | Path) -> "RBM":
+        path = Path(filename)
+        with open(path, "rb") as f:
+            state = pickle.load(f)
+        self.set_state(state)
+        print(f"Model state loaded from {path}.")
+        return self
+
+    def save_loss(self, filename: str = "loss.dat") -> None:
+        path = Path(filename)
+        with open(path, "w") as f:
+            f.write("# epoch KL_divergence\n")
+            for e, d in zip(
+                self.loss_history["epoch"], self.loss_history["kl_divergence"]
+            ):
+                f.write(f"{e} {d}\n")
+        print(f"Loss history saved to {path}")

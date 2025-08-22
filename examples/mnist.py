@@ -1,3 +1,6 @@
+import os
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import tensorflow as tf
 from PIL import Image
 import pickle
@@ -29,6 +32,7 @@ def main(use_GPU=False):
 
     rbm = RBM(visible_num=28 * 28, hidden_num=64, use_GPU=use_GPU)
     rbm.fit(x_train, epochs=10, batch_size=1000)
+    rbm.save_loss()
 
     for i in range(10):
         save_img(f"input_{i}.png", x_test[i])
