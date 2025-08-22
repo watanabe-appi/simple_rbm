@@ -15,7 +15,6 @@ class RBM:
         seed=0,
         use_GPU=False,
     ):
-
         self.np = np
         self.use_GPU = use_GPU
         if self.use_GPU:
