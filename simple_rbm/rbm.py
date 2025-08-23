@@ -1,8 +1,7 @@
 import numpy as np
-from typing import Dict
 import pickle
 from pathlib import Path
-from typing import Any, Dict
+from typing import Union, Dict
 
 
 class RBM:
@@ -228,7 +227,7 @@ class RBM:
 
         return -energy[0][0]
 
-    def save(self, filename: str | Path) -> None:
+    def save(self, filename: Union[str, Path]) -> None:
         path = Path(filename)
         if path.parent:
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -237,7 +236,7 @@ class RBM:
             pickle.dump(state, f)
         print(f"Model state saved to {path}.")
 
-    def load(self, filename: str | Path) -> "RBM":
+    def load(self, filename: Union[str, Path]) -> "RBM":
         path = Path(filename)
         with open(path, "rb") as f:
             state = pickle.load(f)

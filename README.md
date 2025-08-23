@@ -10,27 +10,11 @@ A tiny, educational implementation of a Restricted Boltzmann Machine (RBM).
 
 ## Install
 
-### Install from GitHub (recommended)
+There are two typical ways to install this package, depending on your use case:
 
-Please run the following commands in the appropriate folder (repository):
+### 1. Quick trial (local editable install)
 
-```sh
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
-```
-
-On macOS, Python **3.11** is required to use TensorFlow.
-
-```sh
-python3.11 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install --upgrade pip
-python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
-```
-
-### Local editable install
+If you just want to try it out locally, run:
 
 ```sh
 git clone https://github.com/watanabe-appi/simple_rbm.git
@@ -40,6 +24,24 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e .
 ```
+
+This will install the package in editable mode, so changes you make in the source directory are immediately reflected when you import and run the code.
+
+### Use in your own project repository
+
+If you want to use this package in your own project, first make sure your project directory is the current working directory, then set up a virtual environment there and install:
+
+
+```sh
+# in your own project repository
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python3 -m pip install https://github.com/watanabe-appi/simple_rbm.git
+```
+
+This will install the package directly from GitHub into the virtual environment associated with your project.
+Keeping each project in its own virtual environment is recommended to avoid dependency conflicts.
 
 ### GPU Acceleration (Optional, via CuPy)
 
@@ -57,9 +59,10 @@ Then run examples with `--use-gpu`.
 ```sh
 git clone https://github.com/watanabe-appi/simple_rbm.git
 cd simple_rbm
+python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python3 -m pip install git+ssh://git@github.com/watanabe-appi/simple_rbm.git
+python3 -m pip install https://github.com/watanabe-appi/simple_rbm.git
 python3 -m pip install tensorflow Pillow
 
 # run (CPU)
@@ -82,6 +85,16 @@ Running:
 python3 load_test.py
 ```
 will load the saved weights from `rbm_mnist.pkl` and, just like `mnist.py`, take `input_0.png` through `input_9.png` and produce reconstructed images `output_0.png` through `output_9.png`.
+
+[!NOTE]
+
+On macOS, Python **3.11** is required to use TensorFlow.
+
+```sh
+python3.11 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+```
 
 ### Example Output
 
