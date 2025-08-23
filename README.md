@@ -12,7 +12,7 @@ A tiny, educational implementation of a Restricted Boltzmann Machine (RBM).
 
 There are two typical ways to install this package, depending on your use case:
 
-### 1. Quick trial (local editable install)
+### Quick trial (local editable install)
 
 If you just want to try it out locally, run:
 
@@ -54,7 +54,7 @@ Then run examples with `--use-gpu`.
 
 ## Quickstart: MNIST Example
 
-### Running the Example
+### Clone this respository
 
 ```sh
 git clone https://github.com/watanabe-appi/simple_rbm.git
@@ -64,27 +64,7 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 python3 -m pip install https://github.com/watanabe-appi/simple_rbm.git
 python3 -m pip install tensorflow Pillow
-
-# run (CPU)
-cd examples
-python3 mnist.py
-
-# run (GPU, if CuPy is installed)
-python3 mnist.py --use-gpu
 ```
-
-The script `mnist.py` will:
-* Load the MNIST dataset and train an RBM model.
-* After training, read 10 sample MNIST digit images (`input_0.png` to `input_9.png`) and generate their reconstructed versions (`output_0.png` to `output_9.png`).
-* Save the training loss for each epoch to `loss.dat`.
-* Save the trained model parameters in Pickle format as `rbm_mnist.pkl`.
-
-You can also test reconstruction with the trained model using `load_test.py`.
-Running:
-```sh
-python3 load_test.py
-```
-will load the saved weights from `rbm_mnist.pkl` and, just like `mnist.py`, take `input_0.png` through `input_9.png` and produce reconstructed images `output_0.png` through `output_9.png`.
 
 [!NOTE]
 
@@ -94,13 +74,52 @@ On macOS, Python **3.11** is required to use TensorFlow.
 python3.11 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install --upgrade pip
+python3 -m pip install https://github.com/watanabe-appi/simple_rbm.git
+python3 -m pip install tensorflow Pillow
 ```
+
+### Running the Example
+
+To train an RBM on the MNIST dataset, run:
+
+```sh
+cd examples
+python3 train_mnist.py
+```
+
+Or, you can use GPGPU if CuPy is installed.
+
+```sh
+cd examples
+python3 train_mnist.py --use-gpu
+```
+
+The script  will:
+
+* Train an RBM model using the MNIST dataset.
+* Save the trained model parameters in Pickle format as `rbm_mnist.pkl`.
+* Save the training loss for each epoch to `loss.dat`.
+
+To test reconstruction with the trained model, run:
+
+```sh
+python3 reconstruct_mnist.py
+```
+
+This script will:
+
+* Load the trained model parameters from `rbm_mnist.pkl`.
+* Take the first 10 MNIST digit images as input to the RBM.
+* Save the input images as `input0.png` to `input9.png`.
+* Save the reconstructed images as `output0.png` to `output9.png`.
+
 
 ### Example Output
 
-When you run `mnist.py`, you will see output similar to the following:
+When running train_mnist.py, you will see output similar to:
+
 ```sh
-$ python3 mnist.py
+$ python3 train_mnist.py
 # Computation will proceed on the CPU.
 Epoch [1/10], KL Divergence: 0.3689
 Epoch [2/10], KL Divergence: 0.2504
@@ -115,7 +134,23 @@ Epoch [10/10], KL Divergence: 0.1612
 Loss history saved to loss.dat
 ```
 
-After training, the script will output pairs of images named `input_*.png` and `output_*.png`.  
+When running reconstruct_mnist.py, you will see output like:
+
+```sh
+$ python3 reconstruct_mnist.py
+input_0.png -> RBM -> output_0.png
+input_1.png -> RBM -> output_1.png
+input_2.png -> RBM -> output_2.png
+input_3.png -> RBM -> output_3.png
+input_4.png -> RBM -> output_4.png
+input_5.png -> RBM -> output_5.png
+input_6.png -> RBM -> output_6.png
+input_7.png -> RBM -> output_7.png
+input_8.png -> RBM -> output_8.png
+input_9.png -> RBM -> output_9.png
+```
+
+After training and reconstruction, the scripts produce pairs of images named `input*.png` and `output*.png`:
 * `input_*.png`: the original MNIST digit images used as input to the RBM.  
 * `output_*.png`: the reconstructed images produced by the trained RBM.  
 
