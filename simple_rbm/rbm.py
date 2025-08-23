@@ -50,9 +50,41 @@ class RBM:
         )
 
     def sigmoid(self, x):
-        return 1 / (1 + self.np.exp(-x))
+      """
+      Compute the logistic sigmoid function.
+
+      This function is used as the activation function in the RBM,
+      mapping the input value(s) to the range (0, 1).
+
+      Parameters
+      ----------
+      x : float or numpy.ndarray
+          Input value or array.
+
+      Returns
+      -------
+      float or numpy.ndarray
+          The element-wise sigmoid of the input.
+      """
+      return 1 / (1 + self.np.exp(-x))
 
     def heaviside(self, x):
+        """
+        Compute the Heaviside step function.
+
+        For each element in the input, returns 1 if the value is greater than 0,
+        and 0 otherwise.
+
+        Parameters
+        ----------
+        x : float or numpy.ndarray
+            Input value or array.
+
+        Returns
+        -------
+        numpy.ndarray
+            Array of the same shape as `x`, where each element is either 0 or 1.
+        """
         y = self.np.zeros_like(x)
         y[x > 0] = 1
         y[x <= 0] = 0
