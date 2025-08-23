@@ -197,6 +197,14 @@ cd examples
 python3 mnist.py --use-gpu
 ```
 
+## Implementation Details
+
+* **Model type:** This RBM is a *Bernoulli–Bernoulli* model, where both the visible and hidden units are binary and take values of 0 or 1.  
+
+* **Training algorithm:** The training is performed using *Contrastive Divergence with one Gibbs step (CD-1)*, which is a widely used and efficient method for RBM learning.  
+
+* **Loss function:** The training progress is monitored using the *Kullback–Leibler (KL) divergence* between the input data and its reconstruction.  
+
 ## License
 
 MIT
