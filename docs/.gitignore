@@ -1,0 +1,8 @@
+# Sphinx build artifacts
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# Sphinx doctree cache
+docs/.doctrees/
+

@@ -2,3 +2,6 @@
 simple_rbm.egg-info
 loss.dat
 __pycache__
+# Sphinx build artifacts
+docs/_build/
+docs/.doctrees/
