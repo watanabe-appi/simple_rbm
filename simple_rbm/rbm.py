@@ -29,7 +29,7 @@ class RBM:
         self.visible_num = visible_num
         self.hidden_num = hidden_num
 
-        self.w = self.np.array(self.xavier_init(visible_num, hidden_num))
+        self.w = self.np.array(self.xavier_init())
         self.visible_bias = self.np.zeros(visible_num, dtype=self.np.float32)
         self.hidden_bias = self.np.zeros(hidden_num, dtype=self.np.float32)
 
@@ -42,12 +42,44 @@ class RBM:
         self.learning_rate = learning_rate
         self.momentum = momentum
 
-    def xavier_init(self, fan_in, fan_out, const=1.0):
-        k = const * self.np.sqrt(6.0 / (fan_in + fan_out))
+    def xavier_init(self, constant = 1.0):
+        """
+        Initialize the weight matrix using Xavier (Glorot) initialization.
 
-        return self.np.random.uniform(-k, k, size=(fan_in, fan_out)).astype(
-            self.np.float32
-        )
+        The weights are sampled from a uniform distribution in the range:
+
+        .. math::
+
+            \left[-c \sqrt{\\frac{6}{fan\\_in + fan\\_out}}, \;
+                c \sqrt{\\frac{6}{fan\\_in + fan\\_out}} \\right]
+
+        where ``fan_in`` is the number of input units (visible layer size)
+        and ``fan_out`` is the number of output units (hidden layer size).
+
+        Parameters
+        ----------
+        constant : float, optional
+            Scaling constant (default is 1.0).
+
+        Returns
+        -------
+        numpy.ndarray
+            Initialized weight matrix of shape (visible_num, hidden_num),
+            sampled from the Xavier uniform distribution.
+
+        References
+        ----------
+        .. [1] Glorot, X. and Bengio, Y. (2010).
+        *Understanding the difficulty of training deep feedforward neural networks*.
+        In Proceedings of the Thirteenth International Conference on Artificial
+        Intelligence and Statistics (AISTATS 2010), vol. 9, pp. 249-256.
+        """
+        fan_in = self.visible_num
+        fan_out = self.hidden_num
+        amplitude = constant * self.np.sqrt(6.0 / (fan_in + fan_out))
+
+        weights = self.np.random.uniform(low = -amplitude, high=amplitude, size=(fan_in, fan_out)).astype(self.np.float32)
+        return weights
 
     def sigmoid(self, x):
       """
