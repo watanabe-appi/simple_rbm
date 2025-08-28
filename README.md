@@ -202,7 +202,7 @@ In developing this code, we referred to code previously published by [meownoid](
 
 ## Citation
 
-If you use this code in academic work, please cite it in the text or include it as a software reference in your appendix.
+If this code contributes to your academic work, I would be grateful if you could acknowledge it by citing this repository.
 
 ## License
 
