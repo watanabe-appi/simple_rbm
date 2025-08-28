@@ -8,50 +8,6 @@ A tiny, educational implementation of a Restricted Boltzmann Machine (RBM).
 * Optional GPU acceleration: seamlessly switches to CuPy when available (--use-gpu in examples).
 * Clean, readable code intended for learning and small experiments.
 
-## Install
-
-There are two typical ways to install this package, depending on your use case:
-
-### Quick trial (local editable install)
-
-If you just want to try it out locally, run:
-
-```sh
-git clone https://github.com/watanabe-appi/simple_rbm.git
-cd simple_rbm
-python3 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install --upgrade pip
-python3 -m pip install -e .
-```
-
-This will install the package in editable mode, so changes you make in the source directory are immediately reflected when you import and run the code.
-
-### Use in your own project repository
-
-If you want to use this package in your own project, first make sure your project directory is the current working directory, then set up a virtual environment there and install:
-
-
-```sh
-# in your own project repository
-python3 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install --upgrade pip
-python3 -m pip install https://github.com/watanabe-appi/simple_rbm.git
-```
-
-This will install the package directly from GitHub into the virtual environment associated with your project.
-Keeping each project in its own virtual environment is recommended to avoid dependency conflicts.
-
-### GPU Acceleration (Optional, via CuPy)
-
-If you have CUDA and want GPU acceleration:
-* CUDA 11.2: python -m pip install cupy-cuda112
-* CUDA 11.8: python -m pip install cupy-cuda118
-* CUDA 12.x: python -m pip install cupy-cuda12x
-
-Then run examples with `--use-gpu`.
-
 ## Quickstart: MNIST Example
 
 ### Clone this respository
@@ -197,6 +153,41 @@ cd examples
 python3 mnist.py --use-gpu
 ```
 
+## Install
+
+There are two typical ways to install this package, depending on your use case:
+
+### Quick trial (local editable install)
+
+If you just want to try it out locally, run:
+
+```sh
+git clone https://github.com/watanabe-appi/simple_rbm.git
+cd simple_rbm
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+python3 -m pip install -e .
+```
+
+This will install the package in editable mode, so changes you make in the source directory are immediately reflected when you import and run the code.
+
+### Use in your own project repository
+
+If you want to use this package in your own project, first make sure your project directory is the current working directory, then set up a virtual environment there and install:
+
+
+```sh
+# in your own project repository
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+python3 -m pip install https://github.com/watanabe-appi/simple_rbm.git
+```
+
+This will install the package directly from GitHub into the virtual environment associated with your project.
+Keeping each project in its own virtual environment is recommended to avoid dependency conflicts.
+
 ## Implementation Details
 
 * **Model type:** This RBM is a *Bernoulli–Bernoulli* model, where both the visible and hidden units are binary and take values of 0 or 1.  
@@ -205,10 +196,14 @@ python3 mnist.py --use-gpu
 
 * **Loss function:** The training progress is monitored using the *Kullback–Leibler (KL) divergence* between the input data and its reconstruction.  
 
+## Acknowledgement
+
+In developing this code, we referred to code previously published by [meownoid](https://github.com/meownoid).
+
+## Citation
+
+If you use this code in academic work, please cite it in the text or include it as a software reference in your appendix.
+
 ## License
 
 MIT
-
-## Acknowledgement
-
-If you use this code in academic work, a simple citation in the text (or a software reference in your appendix) would be greatly appreciated.
