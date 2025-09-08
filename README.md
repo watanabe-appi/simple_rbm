@@ -202,8 +202,17 @@ In developing this code, we referred to code previously published by [meownoid](
 
 ## Citation
 
-If this code contributes to your academic work, I would be grateful if you could acknowledge it by citing this repository.
+If this code contributes to your academic work, please acknowledge it by citing the following:
+
+- M. Kobayashi and H. Watanabe,  
+  *Learning and composing of classical music using restricted Boltzmann machines*,  
+  [arXiv:2509.04899](http://arxiv.org/abs/2509.04899) (preprint).
+
+- This repository:  
+  [Simple implementation of Restricted Boltzmann Machine (RBM)](https://github.com/watanabe-appi/simple_rbm)
+
 
 ## License
 
-MIT
+This project is licensed under the MIT License.  
+See the [LICENSE](LICENSE) file for details.
