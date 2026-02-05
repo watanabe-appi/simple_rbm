@@ -13,8 +13,7 @@ A tiny, educational implementation of a Restricted Boltzmann Machine (RBM).
 You can run a demonstration notebook directly in your browser using Google Colab.
 The notebook trains an RBM on the MNIST dataset and visualizes image reconstruction results.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]
-(https://colab.research.google.com/github/watanabe-appi/simple_rbm/blob/main/mnist_reconstruction_demo.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/watanabe-appi/simple_rbm/blob/main/mnist_reconstruction_demo.ipynb)
 
 ## Quickstart: MNIST Example
 
