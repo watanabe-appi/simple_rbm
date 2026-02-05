@@ -8,12 +8,15 @@ A tiny, educational implementation of a Restricted Boltzmann Machine (RBM).
 * Optional GPU acceleration: seamlessly switches to CuPy when available (--use-gpu in examples).
 * Clean, readable code intended for learning and small experiments.
 
-## Try it in Google Colab
+You can run demonstration notebooks directly in your browser using Google Colab.
+These notebooks train an RBM on the MNIST dataset and visualize image reconstruction results.
 
-You can run a demonstration notebook directly in your browser using Google Colab.
-The notebook trains an RBM on the MNIST dataset and visualizes image reconstruction results.
-
+**CPU version**
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/watanabe-appi/simple_rbm/blob/main/mnist_reconstruction_demo.ipynb)
+
+**GPU-accelerated version**
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/watanabe-appi/simple_rbm/blob/main/mnist_reconstruction_demo_GPU.ipynb)
+
 
 ## Quickstart: MNIST Example
 
