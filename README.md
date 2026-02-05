@@ -12,11 +12,10 @@ You can run demonstration notebooks directly in your browser using Google Colab.
 These notebooks train an RBM on the MNIST dataset and visualize image reconstruction results.
 
 **CPU version**
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/watanabe-appi/simple_rbm/blob/main/mnist_reconstruction_demo.ipynb)
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/watanabe-appi/simple_rbm/blob/main/mnist_reconstruction_demo.ipynb)
 
 **GPU-accelerated version**
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/watanabe-appi/simple_rbm/blob/main/mnist_reconstruction_demo_GPU.ipynb)
-
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/watanabe-appi/simple_rbm/blob/main/mnist_reconstruction_demo_GPU.ipynb)
 
 ## Quickstart: MNIST Example
 
