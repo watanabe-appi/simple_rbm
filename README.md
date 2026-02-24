@@ -27,7 +27,7 @@ cd simple_rbm
 python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install --upgrade pip
-python3 -m pip install https://github.com/watanabe-appi/simple_rbm.git
+python3 -m pip install git+https://github.com/watanabe-appi/simple_rbm.git
 python3 -m pip install tensorflow Pillow
 ```
 
@@ -39,7 +39,7 @@ On macOS, Python **3.11** is required to use TensorFlow.
 python3.11 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install --upgrade pip
-python3 -m pip install https://github.com/watanabe-appi/simple_rbm.git
+python3 -m pip install git+https://github.com/watanabe-appi/simple_rbm.git
 python3 -m pip install tensorflow Pillow
 ```
 
@@ -191,7 +191,7 @@ If you want to use this package in your own project, first make sure your projec
 python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install --upgrade pip
-python3 -m pip install https://github.com/watanabe-appi/simple_rbm.git
+python3 -m pip install git+https://github.com/watanabe-appi/simple_rbm.git
 ```
 
 This will install the package directly from GitHub into the virtual environment associated with your project.
